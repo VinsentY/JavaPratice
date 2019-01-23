@@ -6,18 +6,17 @@ import java.util.Stack;
 
 public class BinNode<T> {
 
-    private static final int BinNode = 0;
-    BinNode parent;
-    BinNode lChild;
-    BinNode rChild;
+    BinNode<T> parent;
+    BinNode<T> lChild;
+    BinNode<T> rChild;
 
-    private T data;
+    T data;
 
     boolean isEmpty;
 
     int height;
 
-    //Ôö¼ÓÁË²»°²È«ĞÔ
+    //å¢åŠ äº†ä¸å®‰å…¨æ€§
     public BinNode() {
         isEmpty = true;
     }
@@ -71,12 +70,15 @@ public class BinNode<T> {
     }
 
     BinNode<T> succ() {
-
-        return null;
+        BinNode<T> x = this.rChild;
+        while (x != null) {
+            x = x.lChild;
+        }
+        return x;
     }
 
 
-    //×ÓÊ÷²ã´Î±éÀú
+    //å­æ ‘å±‚æ¬¡éå†
     void travLevel() {
         Queue<BinNode<T>> queue = new LinkedList<>();
         queue.add(this);
@@ -92,25 +94,25 @@ public class BinNode<T> {
         }
     }
 
-    //×ÓÊ÷ÏÈĞò±éÀú
+    //å­æ ‘å…ˆåºéå†
     void travPre() {
-        //µü´úË¼Â·Ò»
-//		Stack<BinNode<T>> stack = new Stack<>();
-//		stack.push(this);
+        //è¿­ä»£æ€è·¯ä¸€
+//		Stack<BinNode<T>> Stack = new Stack<>();
+//		Stack.push(this);
 //
 //		BinNode<T> temp;
-//		while( !stack.isEmpty() ) {
-//			temp = stack.pop();
+//		while( !Stack.isEmpty() ) {
+//			temp = Stack.pop();
 //			visit(temp);
 //			if (temp.rChild != null) {
-//				stack.push(temp.rChild);
+//				Stack.push(temp.rChild);
 //			}
 //			if (temp.lChild != null) {
-//				stack.push(temp.lChild);
+//				Stack.push(temp.lChild);
 //			}
 //		}
 
-        //µü´úË¼Â·¶ş
+        //è¿­ä»£æ€è·¯äºŒ
         Stack<BinNode<T>> stack = new Stack<>();
         BinNode<T> x = this;
         while (true) {
@@ -130,7 +132,7 @@ public class BinNode<T> {
         while (x != null) {
             visit(x);
             stack.push(x.rChild);
-            x = x.lChild;    //ÑØ×ó²àÁ´ÏÂĞĞ
+            x = x.lChild;    //æ²¿å·¦ä¾§é“¾ä¸‹è¡Œ
         }
     }
 
@@ -141,7 +143,7 @@ public class BinNode<T> {
         }
     }
 
-    //×ÓÊ÷ÖĞĞò±éÀú
+    //å­æ ‘ä¸­åºéå†
     void travIn() {
         Stack<BinNode<T>> stack = new Stack<>();
         BinNode<T> x = this;
@@ -171,13 +173,13 @@ public class BinNode<T> {
         stack.pop();
     }
 
-    //×ÓÊ÷ºóĞò±éÀú
+    //å­æ ‘ååºéå†
     void travPost() {
         Stack<BinNode<T>> stack = new Stack<>();
         BinNode<T> x = this;
         stack.push(this);
         while (!stack.empty()) {
-            //ÈôÕ¾µã·Çµ±Ç°½áµãÖ®¸¸£¨Ôò±ØÎªÆäÓÒĞÖ£©
+            //è‹¥ç«™ç‚¹éå½“å‰ç»“ç‚¹ä¹‹çˆ¶ï¼ˆåˆ™å¿…ä¸ºå…¶å³å…„ï¼‰
             if (stack.peek() != x.parent) {
                 gotoHLVFL(stack);
             }
@@ -193,11 +195,11 @@ public class BinNode<T> {
 
     void drawTree() {
 
-        //ÃèÊö£º Ö±¹ÛµÄ´òÓ¡³ö¶ş²æÊ÷£¬µ«ÔİÊ±ÎŞ·¨ºöÂÔ²»´æÔÚµÄ½áµã
+        //æè¿°ï¼š ç›´è§‚çš„æ‰“å°å‡ºäºŒå‰æ ‘ï¼Œä½†æš‚æ—¶æ— æ³•å¿½ç•¥ä¸å­˜åœ¨çš„ç»“ç‚¹
 
         Queue<BinNode<T>> queue1 = new LinkedList<>();
         Queue<BinNode<T>> queue2 = new LinkedList<>();
-        //½«ËùÓĞ½áµãÖğ²ã×°Èëqueue2ÖĞ
+        //å°†æ‰€æœ‰ç»“ç‚¹é€å±‚è£…å…¥queue2ä¸­
         queue1.add(this);
         for (int i = 0; i < Math.pow(2, height) - 1; i++) {
             BinNode<T> x = queue1.remove();
@@ -215,46 +217,46 @@ public class BinNode<T> {
             }
         }
 
-        //ÏÈ²»¿¼ÂÇ±ä³É×Ö·û´®µÄÎÊÌâ
+        //å…ˆä¸è€ƒè™‘å˜æˆå­—ç¬¦ä¸²çš„é—®é¢˜
         StringBuffer sbf = new StringBuffer();
 
-        //Öğ²ãÁ½²ãµã¼ä¸ô£¬ÇÒ·ÇĞÖµÜ½áµã¼ä¸ôµÈÓÚĞÖµÜ½áµã¼ä¸ô
+        //é€å±‚ä¸¤å±‚ç‚¹é—´éš”ï¼Œä¸”éå…„å¼Ÿç»“ç‚¹é—´éš”ç­‰äºå…„å¼Ÿç»“ç‚¹é—´éš”
         Stack<Integer> interval = new Stack<>();
-        //³õÊ¼»¯Ã¿²ã½áµã¼ä¸ô
+        //åˆå§‹åŒ–æ¯å±‚ç»“ç‚¹é—´éš”
         int init = 5;
         int bottomNode = getLevelNodeNum(height);
-        //µ×²ã¿í¶È = ¼ä¸ô³¤¶È * ¼ä¸ôÊı + ½ÚµãÊı
+        //åº•å±‚å®½åº¦ = é—´éš”é•¿åº¦ * é—´éš”æ•° + èŠ‚ç‚¹æ•°
         int maxWidth = init * (bottomNode - 1) + bottomNode;
         for (int i = 0; i < height; i++) {
             interval.push(init);
-            //ÉÏ²ã½áµã¼ä¸ô = ÏÂ²ã½áµã¼ä¸ô * 2 + 1
+            //ä¸Šå±‚ç»“ç‚¹é—´éš” = ä¸‹å±‚ç»“ç‚¹é—´éš” * 2 + 1
             init = 2 * init + 1;
         }
 
-        //Öğ²ãÊ×½áµã¾àÀë×ó²à¾àÀë
+        //é€å±‚é¦–ç»“ç‚¹è·ç¦»å·¦ä¾§è·ç¦»
         int space;
 
         for (int i = 1; i <= height; i++) {
-            //¿Õ°× = (µ×²ã¿í¶È - ¸Ã²ã½áµã¼ä¸ô£© / 2
+            //ç©ºç™½ = (åº•å±‚å®½åº¦ - è¯¥å±‚ç»“ç‚¹ï¼‰ / 2
             space = (maxWidth - (interval.peek() * (getLevelNodeNum(i) - 1) + getLevelNodeNum(i))) / 2;
 
-            //×°ÊÎ±ß
+            //è£…é¥°è¾¹
             if (i != 1) {
                 printSpace(space);
                 for (int j = 1; j <= Math.pow(2, i - 1); j++) {
                     if (j % 2 != 0) {
-                        System.out.print("¨X");
-                        printSymbol(interval.peek(),"¨T");
+                        System.out.print("â•”");
+                        printSymbol(interval.peek(), "â•");
                     } else {
-                        System.out.print("¨[");
-                        printSymbol(interval.peek()," ");
+                        System.out.print("â•—");
+                        printSymbol(interval.peek(), " ");
                     }
 
                 }
                 System.out.println();
             }
 
-            //´òÓ¡½áµã
+            //æ‰“å°ç»“ç‚¹
             printSpace(space);
             for (int j = 1; j <= Math.pow(2, i - 1); j++) {
                 BinNode<T> temp = queue2.remove();
@@ -284,7 +286,7 @@ public class BinNode<T> {
     }
 
     private void printSpace(int n) {
-       printSymbol(n," ");
+        printSymbol(n, " ");
     }
 
 
